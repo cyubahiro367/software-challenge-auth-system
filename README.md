@@ -1,61 +1,191 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel + PostgreSQL Authentication System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 📖 Overview
 
-## About Laravel
+This project is a secure and scalable backend system for user registration and authentication using Laravel 12 and PostgreSQL. It implements a **5-step signup wizard**, **2FA**, **secure login/logout**, and adheres to best practices in input validation, throttling, token security, and session management.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+The system ensures:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* Progressive registration with data persistence
+* Country-specific phone formatting
+* Two-Factor Authentication via email
+* Brute-force protection and token-based session management
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🚀 Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+* ✅ Multi-Step Registration Wizard
+* ✅ Unique identifier for incomplete registration
+* ✅ Auto country code detection for phone number
+* ✅ Step-by-step data persistence with validation
+* ✅ Email-based Two-Factor Authentication (2FA)
+* ✅ Secure password setup
+* ✅ Full review & confirmation before final submission
+* ✅ Secure Login with Laravel Sanctum
+* ✅ Throttling & brute-force attack protection
+* ✅ Logout & token invalidation
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🧱 Requirements
 
-## Laravel Sponsors
+* PHP >= 8.2
+* Composer
+* PostgreSQL >= 14
+* Laravel 12
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## ⚙️ Setup Instructions
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 1. Clone the Repository
 
-## Contributing
+```bash
+git clone https://github.com/your-username/laravel-auth-system.git
+cd laravel-auth-system
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 2. Install PHP Dependencies
 
-## Code of Conduct
+```bash
+composer install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 3. Copy Environment File
 
-## Security Vulnerabilities
+```bash
+cp .env.example .env
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 4. Set Environment Variables
 
-## License
+Edit the `.env` file with your PostgreSQL and Mail credentials:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```env
+DB_CONNECTION=pgsql
+DB_HOST=127.0.0.1
+DB_PORT=5432
+DB_DATABASE=laravel_auth
+DB_USERNAME=postgres
+DB_PASSWORD=your_postgres_password
+
+MAIL_MAILER=smtp
+MAIL_HOST=sandbox.smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=your_mailtrap_user
+MAIL_PASSWORD=your_mailtrap_password
+MAIL_FROM_ADDRESS=auth@example.com
+MAIL_FROM_NAME="LaravelAuth"
+```
+
+### 5. Generate Application Key
+
+```bash
+php artisan key:generate
+```
+
+### 6. Enter PostgreSQL Shell
+
+```bash
+psql -U postgres
+```
+### 7. Create PostgreSQL Database
+
+```sql
+CREATE DATABASE laravel_auth;
+```
+
+### 8. Run Migrations
+
+```bash
+php artisan migrate
+```
+
+### 9. Start Development Server
+
+```bash
+php artisan serve
+```
+
+---
+
+## 🛠️ API Endpoints
+
+All routes are prefixed under `/api/auth/register`
+
+### 📌 Registration Flow
+
+| Step / Action                | Method | Endpoint                                         | Description                                 |
+|------------------------------|--------|--------------------------------------------------|---------------------------------------------|
+| Start Registration           | POST   | `/api/auth/register/start`                       | Begin registration, returns identifier      |
+| Resume Registration          | GET    | `/api/auth/register/resume/{identifier}`         | Resume incomplete registration              |
+| Step 1: Personal Info        | POST   | `/api/auth/register/step-1/{identifier}`         | Submit personal info                        |
+| Step 2: Address              | POST   | `/api/auth/register/step-2/{identifier}`         | Submit address info                         |
+| Step 3: Send 2FA Code        | POST   | `/api/auth/register/step-3/{identifier}`         | Send 2FA code to email                      |
+| Verify 2FA                   | POST   | `/api/auth/register/verify-2fa/{identifier}`     | Verify 2FA code                             |
+| Step 4: Password             | POST   | `/api/auth/register/step-4/{identifier}`         | Set password                                |
+| Step 5: Review & Confirm     | POST   | `/api/auth/register/step-5/{identifier}`         | Review and confirm registration             |
+| Upload Profile Picture       | POST   | `/api/auth/register/upload/profile-picture/{identifier}` | Upload profile picture (PNG only)   |
+| Complete Registration        | POST   | `/api/auth/register/complete/{identifier}`       | Finalize registration                       |
+
+### 🔐 Authentication
+
+| Feature | Method | Endpoint           |
+| ------- | ------ | ------------------ |
+| Login   | POST   | `/api/auth/login`  |
+| Logout  | POST   | `/api/auth/logout` |
+
+---
+
+## ✨ Registration Design Summary
+
+### Step 1: Personal Info
+
+* Honorific (nullable): Mr., Mrs., Miss, Ms., Dr., Prof., Hon.
+* Auto-default: Mr. for male, Ms. for female
+* Required: First name, Last name, Gender, DOB, Email, Nationality, Phone
+* Unique: Email & Phone
+* Email must not be from disposable providers
+* PNG only for optional profile\_picture
+
+### Step 2: Address
+
+* Required: Country of residence, City, Postal code
+* Optional: Apartment name, Room number
+* If nationality ≠ residence: mark user as expatriate
+
+### Step 3: Two-Factor Auth
+
+* Sends a 6-digit code to the user's email
+* Code valid for 10 minutes
+
+### Step 4: Password
+
+* Secure password setup and hashing
+* Follows Laravel's password validation best practices
+
+### Step 5: Review
+
+* Show all previous steps
+* Allow correction before final confirmation
+
+---
+
+## 🔐 Login & Security
+
+* Secure login with email/password
+* Returns access token using Sanctum
+* Implements Laravel throttling to prevent brute-force
+* Secure logout that invalidates the access token
+
+---
+
+## ✅ Deliverables Summary
+
+* ✅ GitHub repository with all branches
+* ✅ `.env.example` with required variables
+* ✅ Database migrations
+* ✅ DTOs, Enums, Requests for all steps
+* ✅ README with setup instructions
+
