@@ -23,4 +23,11 @@ Route::prefix('auth')->group(function () {
             Route::post('/complete/{identifier}', 'complete')->name('register.complete');
             Route::post('/upload/profile-picture/{identifier}', 'uploadProfilePicture')->name('register.uploadProfile');
         });
+
+    // Authentication Routes
+    Route::post('/login', [LoginController::class, 'login'])->name('login');
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    });
 });
