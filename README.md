@@ -42,8 +42,8 @@ The system ensures:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/laravel-auth-system.git
-cd laravel-auth-system
+git clone git@github.com:cyubahiro367/software-challenge-auth-system.git
+cd software-challenge-auth-system
 ```
 
 ### 2. Install PHP Dependencies
